@@ -5,7 +5,7 @@ using System.Text;
 
 namespace t01efc.Models
 {
-    internal class Game
+    public class Game
     {
         //public int Id { get; set; }
         public int GameId { get; set; }
