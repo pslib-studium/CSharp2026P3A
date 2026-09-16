@@ -42,3 +42,8 @@ namespace t01efc.Data
         }
     }
 }
+
+// NuGet Package Console Commands:
+// PM> Add-Migration Initial
+// PM> Update-Database
+
