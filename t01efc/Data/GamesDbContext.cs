@@ -9,6 +9,7 @@ namespace t01efc.Data
     public class GamesDbContext : DbContext
     {
         public DbSet<Game> Games { get; set; }
+        public DbSet<Genre> Genres { get; set; }
 
         private string _connectionString = @"Data Source=games.sqlite";
 
@@ -39,6 +40,15 @@ namespace t01efc.Data
             base.OnModelCreating(modelBuilder);
             //modelBuilder.Entity<Game>().HasKey(g => g.GameId);
             //modelBuilder.Entity<Game>().Property(g => g.Name).IsRequired();
+            // seed
+            // je potřeba to seedovat včetně ID, protože jinak by to nefungovalo, protože by se to snažilo vložit s ID 0 a to by nebylo unikátní
+            modelBuilder.Entity<Genre>().HasData(
+                new Genre { GenreId = 1, Text = "Action" },
+                new Genre { GenreId = 2, Text = "RPG" },
+                new Genre { GenreId = 3, Text = "Adventure" },
+                new Genre { GenreId = 4, Text = "Strategy" },
+                new Genre { GenreId = 5, Text = "Simulation" }
+            );
         }
     }
 }
