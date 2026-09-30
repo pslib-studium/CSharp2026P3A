@@ -14,6 +14,8 @@ namespace t01efc.Models
         public required string Name { get; set; }
 
         public int GenreId { get; set; }
-        public Genre Genre { get; set; }
+        public Genre Genre { get; set; } // N:1 relationship with Genre
+
+        public ICollection<Developer>? Developers { get; set; } // N:M
     }
 }

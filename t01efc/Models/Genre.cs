@@ -10,6 +10,6 @@ namespace t01efc.Models
         public int GenreId { get; set; }
         [Required]
         public required string Text { get; set; }
-        public ICollection<Game> Games { get; set; } = new List<Game>();
+        public ICollection<Game> Games { get; set; } = new List<Game>(); // 1:N relationship with Game
     }
 }

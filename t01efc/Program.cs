@@ -25,7 +25,12 @@ foreach (var g in db.Games.Where(g => g.Name.Contains("The"))) // načte všechn
     Console.WriteLine($"GameId: {g.GameId}, Name: {g.Name}"); // a vypíše je
 }
 Console.WriteLine("------");
-foreach (var gn in db.Genres.Include(g => g.Games)) // načte všechny záznamy z tabulky Genres včetně jejich her
+foreach (var g in db.Games.Where(g => g.Name.Contains("The")).OrderBy(g => g.Name).Take(2).ToList()) // načte všechny záznamy z tabulky Games obsahující frázi "The"
+{
+    Console.WriteLine($"GameId: {g.GameId}, Name: {g.Name}"); // a vypíše je
+}
+Console.WriteLine("------");
+foreach (var gn in db.Genres.Include(g => g.Games).ToList()) // načte všechny záznamy z tabulky Genres včetně jejich her
 {
     Console.WriteLine($"GenreId: {gn.GenreId}, Text: {gn.Text}");
     foreach (var g in gn.Games)
@@ -33,13 +38,48 @@ foreach (var gn in db.Genres.Include(g => g.Games)) // načte všechny záznamy 
         Console.WriteLine($"\tGameId: {g.GameId}, Name: {g.Name}");
     }
 }
+Console.WriteLine("------");
+foreach (var g in db.Games.GroupBy(g => g.Genre).ToList()) // načte všechny záznamy z tabulky Games a seskupí je podle žánru
+{
+    Console.WriteLine($"GenreId: {g.Key.GenreId}, Text: {g.Key.Text}, Count: {g.Count()}");
+}
 // Include je metoda, která umožňuje načíst související data z jiné tabulky. V tomto případě se načítají hry (Games) pro každý žánr (Genre).
 // Takto je vhodné ji použít pro seznamy
 // jinak se použije explicit loading, kdy se načítají související data až při jejich použití, například:
-var genre = db.Genres.First();
-db.Entry(genre).Collection(g => g.Games).Load();
-foreach (var g in genre.Games)
+try
 {
-    Console.WriteLine($"GameId: {g.GameId}, Name: {g.Name}");
-};
+    var game = db.Games.Single(); // načte jedinou položku odpovídající požadavku (v tomto případě první položku z tabulky Games)
+    db.Entry(game).Reference(g => g.Genre).Load();
+    Console.WriteLine($"GameId: {game.GameId}, Name: {game.Name}, Genre: {game.Genre.Text}");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error: {ex.Message}");
+}
 // typicky detailní informace o položce se načítají explicitně, protože se předpokládá, že se budou používat jen zřídka, zatímco seznamy se načítají eager loadingem, protože se předpokládá, že se budou používat často.
+
+// https://pslib.sharepoint.com/sites/studium/it/csharp/SitePages/EntityFramework.aspx
+// https://pslib.sharepoint.com/sites/studium/it/csharp/SitePages/EFCTableLoading.aspx
+
+try
+{
+    var cdproject = db.Developers.Where(d => d.DeveloperId == 1).First();
+    cdproject?.Games?.Add(db.Games.Where(g => g.Name == "Cyberpunk 2077").First());
+    db.SaveChanges();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error: {ex.Message}");
+}
+
+foreach (var d in db.Developers.Include(d => d.Games).ToList())
+{
+    Console.WriteLine($"DeveloperId: {d.DeveloperId}, Name: {d.Name}");
+    if (d.Games != null && d.Games.Any())
+    {
+        foreach (var g in d.Games)
+        {
+            Console.WriteLine($"\tGameId: {g.GameId}, Name: {g.Name}");
+        }
+    }
+}

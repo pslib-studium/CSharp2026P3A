@@ -10,6 +10,7 @@ namespace t01efc.Data
     {
         public DbSet<Game> Games { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<Developer> Developers { get; set; }
 
         private string _connectionString = @"Data Source=games.sqlite";
 
@@ -48,6 +49,13 @@ namespace t01efc.Data
                 new Genre { GenreId = 3, Text = "Adventure" },
                 new Genre { GenreId = 4, Text = "Strategy" },
                 new Genre { GenreId = 5, Text = "Simulation" }
+            );
+            modelBuilder.Entity<Developer>().HasData(
+                new Developer { DeveloperId = 1, Name = "CD Projekt Red" },
+                new Developer { DeveloperId = 2, Name = "Bethesda Game Studios" },
+                new Developer { DeveloperId = 3, Name = "Rockstar Games" },
+                new Developer { DeveloperId = 4, Name = "Valve Corporation" },
+                new Developer { DeveloperId = 5, Name = "Ubisoft" }
             );
         }
     }
