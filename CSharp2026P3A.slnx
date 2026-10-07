@@ -1,4 +1,5 @@
 <Solution>
   <Folder Name="/Položky řešení/" />
   <Project Path="t01efc/t01efc.csproj" />
+  <Project Path="t02efc_nm/t02efc_nm.csproj" Id="49f86490-32ab-4f91-9b0a-eebe88976482" />
 </Solution>
